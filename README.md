@@ -50,15 +50,15 @@ where
 
 SML has the following types of instructions:
 
-| Instruction | Interpretation                                                                                                                  |
-|-----------|---------------------------------------------------------------------------------------------------------------------------------|
-| `add r s` | Add the contents of registers `r` and `s` and store the result in register `r`                                                  |
-| `sub r s` | Subtract the contents of register `s` from the contents of `r` and store  the result in register `r`                            |
-| `mul r s` | Multiply the contents of registers `r` and `s` and store the result in register `r`                                             |
-| `div r s` | Divide (Java integer division) the contents of register `r` by the contents of register `s` and store the result in register `r` |
-| `out s`   | Print the contents of register `s` on the console                                                                               |
-| `mov r x` | Store integer `x` in register `r`                                                                                               |
-| `jnz s L` | If the contents of register `s` is not zero, then make the statement labeled `L` the next statement to execute                  |
+| Instruction | Interpretation                                                                                                                   |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------|
+| `add r s`   | Add the contents of registers `r` and `s` and store the result in register `r`                                                   |
+| `sub r s`   | Subtract the contents of register `s` from the contents of `r` and store  the result in register `r`                             |
+| `mul r s`   | Multiply the contents of registers `r` and `s` and store the result in register `r`                                              |
+| `div r s`   | Divide (Java integer division) the contents of register `r` by the contents of register `s` and store the result in register `r` |
+| `out s`     | Print the contents of register `s` on the console                                                                                |
+| `mov r x`   | Store integer `x` in register `r`                                                                                                |
+| `jnz s L`   | If the contents of register `s` is not zero, then make the statement labeled `L` the next statement to execute                   |
 
 where
 
