@@ -14,38 +14,38 @@ import java.util.Objects;
 
 public class JnzInstruction extends Instruction {
 	private final RegisterName result;
-	private final RegisterName source;
+	private final String l;
 
 	public static final String OP_CODE = "jnz";
 
-	public JnzInstruction(String label, RegisterName result, RegisterName source) {
+	public JnzInstruction(String label, RegisterName result, String l) {
 		super(label, OP_CODE);
 		this.result = result;
-		this.source = source;
+		this.l = l;
 	}
 
 	@Override
 	public int execute(Machine m) {
-		if(m.getRegisters().get(source) != 0)
-			//return counter value of statement labelled L
-			;
+		if(m.getRegisters().get(result) != 0)
+			return m.getLabels().getAddress(l);
+
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
 	@Override
 	public String toString() {
-		return getLabelString() + getOpcode() + " " + result + " " + source;
+		return getLabelString() + getOpcode() + " " + result + " " + l;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof JnzInstruction) {
 			JnzInstruction other = (JnzInstruction) o;
-			return result.equals(other.result) && source.equals(other.source);
+			return result.equals(other.result) && l.equals(other.l);
 		}
 		return false;
 	}
 
 	@Override
-	public int hashCode() {return Objects.hash(result, source, OP_CODE);}
+	public int hashCode() {return Objects.hash(result, l, OP_CODE);}
 }

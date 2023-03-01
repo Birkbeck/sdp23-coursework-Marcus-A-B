@@ -13,7 +13,7 @@ public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();
 
     public enum Register implements RegisterName {
-        EAX, EBX, ECX, EDX, ESP, EBP, ESI, EDI;
+        EAX, EBX, ECX, EDX, ESP, EBP, ESI, EDI
     }
 
     public Registers() {

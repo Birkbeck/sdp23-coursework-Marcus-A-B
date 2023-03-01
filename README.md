@@ -167,7 +167,7 @@ There are two components to this coursework assignment.
 
 2. Now create a subclass of `Instruction` for each kind of SML instruction and fix 
    the method `Translator.instruction` so that it properly translates that kind of instruction.
-   *Recommended*: write one instruction at a time and test it out thoroughly, before proceeding to the next!
+   *Recommended*: write one instruction at a time and test it out thoroughly, before proceeding to the next! 
 
 3. Start with the `add` instruction, because the code for translating it is already there — 
    in method `Translator.instruction`.  Initially, the program will not compile because there is no class 

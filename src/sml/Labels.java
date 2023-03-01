@@ -3,6 +3,7 @@ package sml;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 // TODO: write a JavaDoc for the class
 
@@ -22,6 +23,10 @@ public final class Labels {
 	public void addLabel(String label, int address) {
 		Objects.requireNonNull(label);
 		// TODO: Add a check that there are no label duplicates.
+		if(labels.containsKey(label)){
+			System.err.println("Error in program: Duplicate label found (" + label + ")");
+			System.exit(-1);
+		}
 		labels.put(label, address);
 	}
 
@@ -35,7 +40,18 @@ public final class Labels {
 		// TODO: Where can NullPointerException be thrown here?
 		//       (Write an explanation.)
 		//       Add code to deal with non-existent labels.
-		return labels.get(label);
+
+		try
+		{
+			int address = labels.get(label);
+			return address;
+		}
+		catch(NullPointerException e)
+		{
+			System.err.println("Error in program: No such label found (" + label + ")");
+			System.exit(-1);
+		}
+		return 0;
 	}
 
 	/**
@@ -46,8 +62,7 @@ public final class Labels {
 	 */
 	@Override
 	public String toString() {
-		// TODO: Implement the method using the Stream API (see also class Registers).
-		return "";
+		return labels.entrySet().stream().map(e -> e.getKey() + "->" + e.getValue()).collect(Collectors.toSet()).toString();
 	}
 
 	// TODO: Implement equals and hashCode (needed in class Machine).

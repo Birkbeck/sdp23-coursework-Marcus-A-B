@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class MovInstruction extends Instruction {
 	private final RegisterName result;
-	private final RegisterName source;
+	private final int source;
 
 	public static final String OP_CODE = "mov";
 
-	public MovInstruction(String label, RegisterName result, RegisterName source) {
+	public MovInstruction(String label, RegisterName result, int source) {
 		super(label, OP_CODE);
 		this.result = result;
 		this.source = source;
@@ -27,7 +27,7 @@ public class MovInstruction extends Instruction {
 	@Override
 	public int execute(Machine m) {
 		// TODO: replace 1 with x
-		m.getRegisters().set(result, 1);
+		m.getRegisters().set(result, source);
 		return NORMAL_PROGRAM_COUNTER_UPDATE;
 	}
 
@@ -40,7 +40,7 @@ public class MovInstruction extends Instruction {
 	public boolean equals(Object o) {
 		if (o instanceof MovInstruction) {
 			MovInstruction other = (MovInstruction) o;
-			return result.equals(other.result) && source.equals(other.source);
+			return result.equals(other.result) && source == source;
 		}
 		return false;
 	}
