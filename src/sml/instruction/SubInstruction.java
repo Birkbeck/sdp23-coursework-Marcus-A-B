@@ -18,6 +18,12 @@ public class SubInstruction extends Instruction {
 
 	public static final String OP_CODE = "sub";
 
+	/**
+	 *
+	 * @param label
+	 * @param result
+	 * @param source
+	 */
 	public SubInstruction(String label, RegisterName result, RegisterName source) {
 		super(label, OP_CODE);
 		this.result = result;
