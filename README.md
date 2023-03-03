@@ -186,7 +186,7 @@ There are two components to this coursework assignment.
 
 7. There are also a few places in the code with TODO: labels - follow the instructions to
    improve the provided code (or implement missing methods as required). 
-   Use the Java Stream API whenever possible instead of loops.
+   Use the Java Stream API whenever possible instead of loops. 
 
 ##### Part II
 
