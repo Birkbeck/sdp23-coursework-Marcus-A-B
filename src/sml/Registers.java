@@ -3,11 +3,11 @@ package sml;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
+ * Class that enumerates which register names can be used as keys in a registers HashMap
+ * which is used to store integer values
  *
- * @author ...
+ * @author Birkbeck
  */
 public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();
