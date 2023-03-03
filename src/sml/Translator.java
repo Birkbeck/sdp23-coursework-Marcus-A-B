@@ -5,6 +5,7 @@ import sml.instruction.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,6 +24,8 @@ public final class Translator {
 
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
+
+    private HashMap<String, Class<? extends Instruction>> instructionMap;
 
     public Translator(String fileName) {
         this.fileName =  fileName;
@@ -62,6 +65,16 @@ public final class Translator {
      * with its label already removed.
      */
     private Instruction getInstruction(String label) {
+
+        instructionMap = new HashMap<String, Class<? extends Instruction>>();
+        instructionMap.put(AddInstruction.OP_CODE, AddInstruction.class);
+        instructionMap.put(SubInstruction.OP_CODE, SubInstruction.class);
+        instructionMap.put(MulInstruction.OP_CODE, MulInstruction.class);
+        instructionMap.put(DivInstruction.OP_CODE, DivInstruction.class);
+        instructionMap.put(MovInstruction.OP_CODE, MovInstruction.class);
+        instructionMap.put(JnzInstruction.OP_CODE, JnzInstruction.class);
+        instructionMap.put(OutInstruction.OP_CODE, OutInstruction.class);
+
         if (line.isEmpty())
             return null;
 
@@ -103,7 +116,6 @@ public final class Translator {
                 return new JnzInstruction(label, Register.valueOf(r), s);
             }
 
-            // TODO: add code for all other types of instructions
 
             // TODO: Then, replace the switch by using the Reflection API
 
