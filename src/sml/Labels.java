@@ -5,11 +5,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
+ * Represents a mapping of labels to program addresses
  *
- * @author ...
+ * @author Birkbeck
  */
 public final class Labels {
 	private final Map<String, Integer> labels = new HashMap<>();
@@ -41,6 +40,10 @@ public final class Labels {
 		//       (Write an explanation.)
 		//       Add code to deal with non-existent labels.
 
+		// if the label is not found in the HashMap a null is returned
+		// primitive types, in this case int, cannot have null values
+		// and so a NullPointerException is thrown
+
 		try
 		{
 			int address = labels.get(label);
@@ -51,7 +54,7 @@ public final class Labels {
 			System.err.println("Error in program: No such label found (" + label + ")");
 			System.exit(-1);
 		}
-		return 0;
+		return -1;
 	}
 
 	/**

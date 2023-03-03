@@ -7,7 +7,7 @@ import sml.RegisterName;
 import java.util.Objects;
 
 /**
- * Represents a Mov Instruction loads an integer into a register
+ * Represents a Mov Instruction which loads an integer into a register
  * @author Marcus Burns
  */
 
@@ -19,7 +19,7 @@ public class MovInstruction extends Instruction {
 
 	/**
 	 * Constructor: a Mov instruction with a label, a result register,
-	 * and a source register. (The registers are enumerated).
+	 * and a source register. (The register is enumerated).
 	 *
 	 * @param label optional label (can be null)
 	 * @param result a register where the source integer is stored
