@@ -62,7 +62,7 @@ public class MulInstruction extends Instruction {
 	 * Compares this object to the specified object for equality.
 	 *
 	 * @param o the object to compare this instance to.
-	 * @return true if the specified object is an instance of SubInstruction and
+	 * @return true if the specified object is an instance of MulInstruction and
 	 * the result and source registers are equal.
 	 */
 	@Override
