@@ -7,9 +7,9 @@ import sml.RegisterName;
 import java.util.Objects;
 
 /**
- * Represents and Add Instruction which sums the contents of two registers
+ * Represents an Add Instruction which sums the contents of two registers
  * and stores the result in the first register.
- * @author
+ * @author Birkbeck
  */
 
 public class AddInstruction extends Instruction {
