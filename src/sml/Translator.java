@@ -76,20 +76,6 @@ public final class Translator {
     }
 
     /**
-     *
-     * @param constructorParameters
-     * @return
-     */
-    private Class<?>[] getConstructorParameterTypes(Object[] constructorParameters) {
-        Class<?>[] parameterTypes = new Class<?>[constructorParameters.length];
-        for (int i = 0; i < constructorParameters.length; i++) {
-            parameterTypes[i] = constructorParameters[i].getClass();
-        }
-        return parameterTypes;
-    }
-
-
-    /**
      * Translates the current line into an instruction with the given label
      *
      * @param label the instruction label
