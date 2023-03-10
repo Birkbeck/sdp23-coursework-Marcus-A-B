@@ -4,10 +4,9 @@ import sml.instruction.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static sml.Registers.Register;
 
@@ -25,7 +24,7 @@ public final class Translator {
     // line contains the characters in the current line that's not been processed yet
     private String line = "";
 
-    private HashMap<String, Class<? extends Instruction>> instructionMap;
+    private HashMap<String, InstructionDescriptor> instructionMap;
 
     public Translator(String fileName) {
         this.fileName =  fileName;
@@ -56,6 +55,41 @@ public final class Translator {
     }
 
     /**
+     * Stores an Instruction subclass along with its Constructor parameters
+     */
+    private class InstructionDescriptor{
+        private Class<? extends Instruction> instructionClass;
+        private Class[] constructorParameters;
+
+        public InstructionDescriptor(Class<? extends Instruction> instructionClass,Class... constructorParameters){
+            this.instructionClass = instructionClass;
+            this.constructorParameters = constructorParameters;
+        }
+
+        public Class<? extends Instruction> getInstructionClass(){
+            return instructionClass;
+        }
+
+        public Class[] getConstructionParameters(){
+            return constructorParameters;
+        }
+    }
+
+    /**
+     *
+     * @param constructorParameters
+     * @return
+     */
+    private Class<?>[] getConstructorParameterTypes(Object[] constructorParameters) {
+        Class<?>[] parameterTypes = new Class<?>[constructorParameters.length];
+        for (int i = 0; i < constructorParameters.length; i++) {
+            parameterTypes[i] = constructorParameters[i].getClass();
+        }
+        return parameterTypes;
+    }
+
+
+    /**
      * Translates the current line into an instruction with the given label
      *
      * @param label the instruction label
@@ -66,65 +100,65 @@ public final class Translator {
      */
     private Instruction getInstruction(String label) {
 
-        instructionMap = new HashMap<String, Class<? extends Instruction>>();
-        instructionMap.put(AddInstruction.OP_CODE, AddInstruction.class);
-        instructionMap.put(SubInstruction.OP_CODE, SubInstruction.class);
-        instructionMap.put(MulInstruction.OP_CODE, MulInstruction.class);
-        instructionMap.put(DivInstruction.OP_CODE, DivInstruction.class);
-        instructionMap.put(MovInstruction.OP_CODE, MovInstruction.class);
-        instructionMap.put(JnzInstruction.OP_CODE, JnzInstruction.class);
-        instructionMap.put(OutInstruction.OP_CODE, OutInstruction.class);
+        instructionMap = new HashMap<>();
 
-        if (line.isEmpty())
+        instructionMap.put(AddInstruction.OP_CODE, new InstructionDescriptor(AddInstruction.class, String.class, RegisterName.class, RegisterName.class));
+        instructionMap.put(SubInstruction.OP_CODE, new InstructionDescriptor(SubInstruction.class, String.class, RegisterName.class, RegisterName.class));
+        instructionMap.put(MulInstruction.OP_CODE, new InstructionDescriptor(MulInstruction.class, String.class, RegisterName.class, RegisterName.class));
+        instructionMap.put(DivInstruction.OP_CODE, new InstructionDescriptor(DivInstruction.class, String.class, RegisterName.class, RegisterName.class));
+        instructionMap.put(MovInstruction.OP_CODE, new InstructionDescriptor(MovInstruction.class, String.class, RegisterName.class, int.class));
+        instructionMap.put(JnzInstruction.OP_CODE, new InstructionDescriptor(JnzInstruction.class, String.class, RegisterName.class, String.class));
+        instructionMap.put(OutInstruction.OP_CODE, new InstructionDescriptor(OutInstruction.class, String.class, RegisterName.class));
+
+        if (line.isEmpty()) {
             return null;
+        }
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case MovInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MovInstruction(label, Register.valueOf(r), Integer.valueOf(s));
-            }
-            case OutInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(r));
-            }
-            case JnzInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new JnzInstruction(label, Register.valueOf(r), s);
+
+        InstructionDescriptor instructionData = instructionMap.get(opcode);
+        if (instructionData == null) {
+            System.out.println("Unknown instruction: " + opcode);
+            return null;
+        }
+
+        Class<? extends Instruction> instructionClass = instructionData.getInstructionClass();
+        Class[] constructorParams = instructionData.getConstructionParameters();
+
+        System.out.println(Arrays.stream(constructorParams).toList());
+        try {
+            Constructor<? extends Instruction> constructor = instructionClass.getConstructor(constructorParams);
+
+            String r = scan();
+            String s = scan();
+
+            Instruction instruction = null;
+
+            if( constructorParams.length < 3)
+
+                instruction = constructor.newInstance(label, Register.valueOf(r));
+
+            else if( constructorParams[2].toString().equals("int"))
+
+                instruction = constructor.newInstance(label, Register.valueOf(r), Integer.valueOf(s));
+
+            else if( constructorParams[2].toString().equals("interface sml.RegisterName"))
+
+                instruction = constructor.newInstance(label, Register.valueOf(r), Register.valueOf(s));
+
+            else if( constructorParams[2].toString().equals("class java.lang.String"))
+
+                instruction = constructor.newInstance(label, Register.valueOf(r), s);
+
+            else{
+                System.out.println("Invalid parameter type");
+                System.exit(-1);
             }
 
+            return instruction;
 
-            // TODO: Then, replace the switch by using the Reflection API
-
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
-
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
